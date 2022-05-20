@@ -1,13 +1,13 @@
 package interfaces
 
 import (
+	"gitlab/awalom/banking/dta"
 	"gitlab/awalom/banking/errs"
-	"gitlab/awalom/banking/model"
 )
 
 // This is port. All ports are interfaces
 
 type ICustomerService interface {
-	GetAllCustomers() ([]model.Customer, *errs.AppError)
-	GetCustomer(id string) (*model.Customer, *errs.AppError)
+	GetAllCustomers() ([]dta.CustomerResponse, *errs.AppError)
+	GetCustomer(id string) (*dta.CustomerResponse, *errs.AppError)
 }

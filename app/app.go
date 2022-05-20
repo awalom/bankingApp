@@ -23,8 +23,9 @@ const (
 	defaultDatabaseName = "banking"
 	defaultUserName     = "root"
 	defaultPassword     = ""
-	defaultProto        = "tcp"
-	defaultUrl          = "localhost:3306"
+	defaultDbPort       = "3306"
+	defaultDbAdr        = "localhost"
+	defaultAppPort      = ":8081"
 )
 
 func init() {
@@ -38,14 +39,14 @@ func init() {
 		Password = defaultPassword
 	}
 
-	DbProto = os.Getenv("PROTOCOL")
+	DbProto = os.Getenv("DBPORT")
 	if DbProto == "" {
-		DbProto = defaultProto
+		DbProto = defaultDbPort
 	}
 
 	DBUrl = os.Getenv("URL")
 	if DBUrl == "" {
-		DBUrl = defaultUrl
+		DBUrl = defaultDbAdr
 	}
 
 	DatabaseName = os.Getenv("DATABASE_NAME")
@@ -63,6 +64,6 @@ func Start() {
 	router.HandleFunc("/customers", ch.GetAllCustomers)
 	router.HandleFunc("/customers/{id:[0-9]+}", ch.GetCustomer)
 	fmt.Println("Listening at port 8081 .................")
-	log.Fatalln(http.ListenAndServe(":8081", router))
+	log.Fatalln(http.ListenAndServe(defaultAppPort, router))
 
 }

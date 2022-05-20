@@ -8,3 +8,11 @@ type Customer struct {
 	DateOfBirth string `db:"date_of_birth" json:"dateOfBirth"`
 	Status      string `db:"status" json:"status"`
 }
+
+func (c *Customer) StatusAsText() string {
+	statusAsString := "active"
+	if c.Status == "0" {
+		statusAsString = "inactive"
+	}
+	return statusAsString
+}
