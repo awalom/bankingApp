@@ -1,0 +1,8 @@
+.log
+*.exe
+
+/goapp
+
+.vscode
+.idea
+.idea/vcs.xml
