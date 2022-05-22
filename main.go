@@ -6,6 +6,7 @@ import (
 )
 
 func main() {
+	logger.InitLogger(app.LogEnv)
 	logger.Info("Starting the application")
 	app.Start()
 }

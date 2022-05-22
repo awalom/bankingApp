@@ -3,22 +3,11 @@ package logger
 import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	"os"
 )
 
 var log *zap.Logger
 
-func init() {
-	env := os.Getenv("ENV")
-	if env != "" {
-		initLogger(env)
-	} else {
-		initLogger("dev")
-	}
-
-}
-
-func initLogger(env string) {
+func InitLogger(env string) {
 	var err error
 	var config zap.Config
 	var encodeConfig zapcore.EncoderConfig

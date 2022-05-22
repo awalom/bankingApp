@@ -10,6 +10,7 @@ var (
 	DbPort       string
 	DBUrl        string
 	DatabaseName string
+	LogEnv       string
 )
 
 const (
@@ -19,6 +20,7 @@ const (
 	defaultDbPort       = "3306"
 	defaultDatabaseName = "banking"
 	defaultAppPort      = ":8081"
+	defaultLogEng       = "dev"
 )
 
 func init() {
@@ -44,5 +46,9 @@ func init() {
 	DatabaseName = os.Getenv("DATABASE_NAME")
 	if DatabaseName == "" {
 		DatabaseName = defaultDatabaseName
+	}
+	LogEnv = os.Getenv("ENV")
+	if LogEnv == "" {
+		LogEnv = defaultLogEng
 	}
 }
