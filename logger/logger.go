@@ -3,15 +3,32 @@ package logger
 import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"os"
 )
 
 var log *zap.Logger
 
 func init() {
-	var err error
+	env := os.Getenv("ENV")
+	if env != "" {
+		initLogger(env)
+	} else {
+		initLogger("dev")
+	}
 
-	config := zap.NewProductionConfig()
-	encodeConfig := zap.NewProductionEncoderConfig()
+}
+
+func initLogger(env string) {
+	var err error
+	var config zap.Config
+	var encodeConfig zapcore.EncoderConfig
+	if env == "prd" {
+		config = zap.NewProductionConfig()
+		encodeConfig = zap.NewProductionEncoderConfig()
+	} else {
+		config = zap.NewDevelopmentConfig()
+		encodeConfig = zap.NewDevelopmentEncoderConfig()
+	}
 	encodeConfig.TimeKey = "timestamp"
 	encodeConfig.CallerKey = "source"
 	encodeConfig.StacktraceKey = ""
@@ -21,7 +38,6 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-
 }
 
 func Info(msg string, field ...zap.Field) {

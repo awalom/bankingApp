@@ -20,6 +20,7 @@ func (s *CustomerController) GetAllCustomers(w http.ResponseWriter, r *http.Requ
 		helpers.WriteResponse(w, err.Code, err.AsMsg())
 		return
 	}
+	logger.Info("Fetched customers in the path: " + r.URL.Path)
 	helpers.WriteResponse(w, http.StatusOK, c)
 
 }

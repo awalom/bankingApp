@@ -14,7 +14,7 @@ var (
 
 const (
 	defaultUserName     = "root"
-	defaultPassword     = ""
+	defaultPassword     = "password"
 	defaultDbAdr        = "localhost"
 	defaultDbPort       = "3306"
 	defaultDatabaseName = "banking"
