@@ -5,7 +5,6 @@ import (
 	"gitlab/awalom/banking/errs"
 	"gitlab/awalom/banking/interfaces"
 	"gitlab/awalom/banking/logger"
-	"gitlab/awalom/banking/repo"
 )
 
 // CustomerService The implementation is a struct
@@ -16,7 +15,7 @@ type CustomerService struct {
 // GetAllCustomers Receiver function
 func (s CustomerService) GetAllCustomers() ([]dta.CustomerResponse, *errs.AppError) {
 
-	customers, err := s.Repo.FindAll()
+	customers, err := s.Repo.Query()
 	var customersResponse []dta.CustomerResponse
 
 	if err != nil {
@@ -30,7 +29,7 @@ func (s CustomerService) GetAllCustomers() ([]dta.CustomerResponse, *errs.AppErr
 }
 
 func (s CustomerService) GetCustomer(id string) (*dta.CustomerResponse, *errs.AppError) {
-	c, err := s.Repo.FindOne(id)
+	c, err := s.Repo.QueryRow(id)
 	if err != nil {
 		return &dta.CustomerResponse{}, err
 
@@ -40,6 +39,6 @@ func (s CustomerService) GetCustomer(id string) (*dta.CustomerResponse, *errs.Ap
 }
 
 // GetCustomerService Helper Function
-func GetCustomerService(repository repo.CustomerRepo) CustomerService {
+func GetCustomerService(repository interfaces.ICustomerRepository) CustomerService {
 	return CustomerService{repository}
 }

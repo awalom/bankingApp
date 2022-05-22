@@ -6,6 +6,6 @@ import (
 )
 
 type ICustomerRepository interface {
-	FindAll() ([]model.Customer, *errs.AppError)
-	FindOne(id string) (*model.Customer, *errs.AppError)
+	Query() ([]model.Customer, *errs.AppError)
+	QueryRow(id string) (*model.Customer, *errs.AppError)
 }
