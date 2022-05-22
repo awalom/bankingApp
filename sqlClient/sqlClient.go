@@ -67,6 +67,7 @@ func GetSqlClient(userName string, password string, dbAddr string, port string, 
 }
 
 func getConnectionUrl(userName string, password string, dbAddr string, port string, dbname string) string {
-	dbConnectionString := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", userName, password, port, dbAddr, dbname)
+	dbConnectionString := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", userName, password, dbAddr, port, dbname)
+	fmt.Println(dbConnectionString)
 	return dbConnectionString
 }
