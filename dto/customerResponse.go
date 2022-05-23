@@ -1,4 +1,4 @@
-package dta
+package dto
 
 import (
 	"gitlab/awalom/banking/model"

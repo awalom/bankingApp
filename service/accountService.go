@@ -1,7 +1,7 @@
 package service
 
 import (
-	"gitlab/awalom/banking/dta"
+	"gitlab/awalom/banking/dto"
 	"gitlab/awalom/banking/errs"
 	"gitlab/awalom/banking/interfaces"
 	"gitlab/awalom/banking/logger"
@@ -15,7 +15,7 @@ type AccountService struct {
 }
 
 // NewAccount  Receiver function
-func (s AccountService) NewAccount(a dta.AccountRequest) (*dta.AccountResponse, *errs.AppError) {
+func (s AccountService) NewAccount(a dto.AccountRequest) (*dto.AccountResponse, *errs.AppError) {
 
 	valErr := a.ValidateRequest()
 	if valErr != nil {
@@ -39,7 +39,7 @@ func (s AccountService) NewAccount(a dta.AccountRequest) (*dta.AccountResponse, 
 	}
 
 	logger.InitLogger("Added new account to customer: " + account.CustomerId)
-	response := dta.AccountResponse{CustomerId: newAccount.CustomerId}
+	response := dto.AccountResponse{TransactionId: newAccount.AccountId}
 
 	return &response, nil
 }

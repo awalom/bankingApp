@@ -2,7 +2,7 @@ package app
 
 import (
 	"encoding/json"
-	"gitlab/awalom/banking/dta"
+	"gitlab/awalom/banking/dto"
 	"gitlab/awalom/banking/helpers"
 	"gitlab/awalom/banking/interfaces"
 	"gitlab/awalom/banking/logger"
@@ -21,7 +21,7 @@ func (c AccountController) AddNewAccount(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	var requestBody dta.AccountRequest
+	var requestBody dto.AccountRequest
 
 	err = json.NewDecoder(r.Body).Decode(&requestBody)
 	requestBody.CustomerId = customerId
@@ -36,6 +36,7 @@ func (c AccountController) AddNewAccount(w http.ResponseWriter, r *http.Request)
 		logger.Error("Could not save new Account" + appError.Message)
 		helpers.WriteResponse(w, appError.Code, appError.Message)
 	} else {
+		logger.Info("Added now account to customer: " + account.TransactionId)
 		helpers.WriteResponse(w, http.StatusOK, account)
 	}
 

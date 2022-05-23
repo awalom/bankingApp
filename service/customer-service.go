@@ -1,7 +1,7 @@
 package service
 
 import (
-	"gitlab/awalom/banking/dta"
+	"gitlab/awalom/banking/dto"
 	"gitlab/awalom/banking/errs"
 	"gitlab/awalom/banking/interfaces"
 	"gitlab/awalom/banking/logger"
@@ -13,28 +13,28 @@ type CustomerService struct {
 }
 
 // GetAllCustomers Receiver function
-func (s CustomerService) GetAllCustomers() ([]dta.CustomerResponse, *errs.AppError) {
+func (s CustomerService) GetAllCustomers() ([]dto.CustomerResponse, *errs.AppError) {
 
 	customers, err := s.Repo.Query()
-	var customersResponse []dta.CustomerResponse
+	var customersResponse []dto.CustomerResponse
 
 	if err != nil {
 		logger.Error("could find customers " + err.Message)
 		return nil, err
 	}
 	for _, c := range customers {
-		customersResponse = append(customersResponse, dta.ConvertToCustomerResponse(&c))
+		customersResponse = append(customersResponse, dto.ConvertToCustomerResponse(&c))
 	}
 	return customersResponse, nil
 }
 
-func (s CustomerService) GetCustomer(id string) (*dta.CustomerResponse, *errs.AppError) {
+func (s CustomerService) GetCustomer(id string) (*dto.CustomerResponse, *errs.AppError) {
 	c, err := s.Repo.QueryRow(id)
 	if err != nil {
-		return &dta.CustomerResponse{}, err
+		return &dto.CustomerResponse{}, err
 
 	}
-	response := dta.ConvertToCustomerResponse(c)
+	response := dto.ConvertToCustomerResponse(c)
 	return &response, nil
 }
 
