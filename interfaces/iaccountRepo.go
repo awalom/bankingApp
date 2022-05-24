@@ -7,4 +7,5 @@ import (
 
 type IAccountRepo interface {
 	Save(account model.Account) (*model.Account, *errs.AppError)
+	GetAccount(id string) (*model.Account, *errs.AppError)
 }

@@ -3,15 +3,13 @@ package service
 import (
 	"gitlab/awalom/banking/dto"
 	"gitlab/awalom/banking/errs"
-	"gitlab/awalom/banking/interfaces"
 	"gitlab/awalom/banking/logger"
-	"gitlab/awalom/banking/model"
-	"time"
+	"gitlab/awalom/banking/repo"
 )
 
 // AccountService  The implementation is a struct
 type AccountService struct {
-	Repo interfaces.IAccountRepo
+	Repo repo.AccountRepo
 }
 
 // NewAccount  Receiver function
@@ -22,14 +20,7 @@ func (s AccountService) NewAccount(a dto.AccountRequest) (*dto.AccountResponse, 
 		logger.Error("Account is not valid")
 		return nil, valErr
 	}
-	account := model.Account{
-		AccountId:   "",
-		CustomerId:  a.CustomerId,
-		OpeningDate: time.Now().Format("2006-01-02 15:04:05"),
-		AccountType: a.AccountType,
-		Amount:      a.Amount,
-		Status:      "1",
-	}
+	account := a.AccountRequestToAccount()
 
 	newAccount, err := s.Repo.Save(account)
 
@@ -45,6 +36,6 @@ func (s AccountService) NewAccount(a dto.AccountRequest) (*dto.AccountResponse, 
 }
 
 // GetAccountService  Helper Function
-func GetAccountService(repository interfaces.IAccountRepo) AccountService {
-	return AccountService{repository}
+func GetAccountService(repo repo.AccountRepo) AccountService {
+	return AccountService{repo}
 }

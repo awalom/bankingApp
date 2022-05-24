@@ -2,6 +2,8 @@ package dto
 
 import (
 	"gitlab/awalom/banking/errs"
+	"gitlab/awalom/banking/model"
+	"time"
 )
 
 type AccountRequest struct {
@@ -18,4 +20,15 @@ func (a AccountRequest) ValidateRequest() *errs.AppError {
 		return errs.ValidationError("Account type should be checking or saving")
 	}
 	return nil
+}
+
+func (a AccountRequest) AccountRequestToAccount() model.Account {
+	return model.Account{
+		AccountId:   "",
+		CustomerId:  a.CustomerId,
+		OpeningDate: time.Now().Format("2006-01-02 15:04:05"),
+		AccountType: a.AccountType,
+		Amount:      a.Amount,
+		Status:      "1",
+	}
 }

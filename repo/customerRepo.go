@@ -10,11 +10,11 @@ import (
 	"log"
 )
 
-type CustomerClientDb struct {
+type CustomerRepo struct {
 	client *sqlx.DB
 }
 
-func (d CustomerClientDb) Query() ([]model.Customer, *errs.AppError) {
+func (d CustomerRepo) Query() ([]model.Customer, *errs.AppError) {
 	var err error
 	customers := make([]model.Customer, 0)
 
@@ -30,7 +30,7 @@ func (d CustomerClientDb) Query() ([]model.Customer, *errs.AppError) {
 
 }
 
-func (d CustomerClientDb) QueryRow(id string) (*model.Customer, *errs.AppError) {
+func (d CustomerRepo) QueryRow(id string) (*model.Customer, *errs.AppError) {
 
 	var c model.Customer
 
@@ -51,6 +51,6 @@ func (d CustomerClientDb) QueryRow(id string) (*model.Customer, *errs.AppError) 
 
 }
 
-func GetCustomerRepo(dbclient *sqlx.DB) CustomerClientDb {
-	return CustomerClientDb{client: dbclient}
+func GetCustomerRepo(dbclient *sqlx.DB) CustomerRepo {
+	return CustomerRepo{client: dbclient}
 }

@@ -5,31 +5,34 @@ import (
 	"gitlab/awalom/banking/errs"
 	"gitlab/awalom/banking/interfaces"
 	"gitlab/awalom/banking/logger"
-	"gitlab/awalom/banking/model"
-	"time"
 )
 
 type TransactionService struct {
-	interfaces.ITransactionRepo
+	tr interfaces.ITransactionRepo
+	ac interfaces.IAccountRepo
 }
 
 func (ts TransactionService) AddNewTransaction(request dto.TransactionRequest) (*dto.TransactionResponse, *errs.AppError) {
 
-	err := request.ValidateTransaction(5000.10)
+	//request validation
+	err := request.ValidateTransaction()
 	if err != nil {
-		logger.Error("Invalid transaction")
-		return nil, errs.ValidationError("Invalid Transaction")
-	}
-	//convert transaction request to transaction model
-	newTransaction := model.Transaction{
-		TransactionId:   "",
-		AccountId:       request.AccountId,
-		Amount:          request.Amount,
-		TransactionType: request.TransactionType,
-		TransactionDate: time.Now().Format("2006-01-02 15:04:05"),
+		return nil, errs.NewUnavailable(err.Message)
 	}
 
-	result, resultErr := ts.Save(newTransaction)
+	//check if fund exist in the account
+	account, err := ts.ac.GetAccount(request.AccountId)
+	if err != nil {
+		return nil, errs.NewUnavailable(err.Message)
+	}
+	if account.Amount < request.Amount {
+		return nil, errs.NewNotFoundError("Balance is to low")
+	}
+
+	//convert transaction request to transaction model
+	newTransaction := request.TransactionRequestToTransaction()
+
+	result, resultErr := ts.tr.Save(newTransaction)
 
 	if resultErr != nil {
 		logger.Error("Error while saving new transaction" + newTransaction.AccountId + resultErr.Message)
@@ -46,6 +49,6 @@ func (ts TransactionService) AddNewTransaction(request dto.TransactionRequest) (
 
 }
 
-func GetTransactionService(tr interfaces.ITransactionRepo) TransactionService {
-	return TransactionService{tr}
+func GetTransactionService(tr interfaces.ITransactionRepo, ar interfaces.IAccountRepo) TransactionService {
+	return TransactionService{tr, ar}
 }

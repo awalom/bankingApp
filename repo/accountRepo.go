@@ -29,6 +29,17 @@ func (accountRepo AccountRepo) Save(a model.Account) (*model.Account, *errs.AppE
 	return &a, nil
 }
 
-func GetAccountRep0(sqlClient *sqlx.DB) AccountRepo {
+func (accountRepo AccountRepo) GetAccount(id string) (*model.Account, *errs.AppError) {
+	sqlGetAccount := "SELECT account_id, customer_id, opening_date, account_type, amount from accounts where account_id = ?"
+	var account model.Account
+	err := accountRepo.client.Get(&account, sqlGetAccount, id)
+	if err != nil {
+		logger.Error("Error while fetching account information: " + err.Error())
+		return nil, errs.NewUnexpectedError("Unexpected database error")
+	}
+	return &account, nil
+}
+
+func GetAccountRepo(sqlClient *sqlx.DB) AccountRepo {
 	return AccountRepo{sqlClient}
 }
